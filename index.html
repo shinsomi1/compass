@@ -1,0 +1,443 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>디지털 나침반</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: one phone-width column, iOS home screen → app screens, same look as the 믿음의 나침반 textbook */
+:root{
+  --bg:#F2F2F7; --card:#FFFFFF; --fg:#1C1C1E; --muted:#6C6C70; --sep:#E5E5EA; --fill:#E9E9EB;
+  --link:#0A64C9; --on-link:#FFFFFF; --ok:#1F7A36; --bad:#C4231B; --ok-bg:#E6F7EA; --bad-bg:#FFF1F0;
+  --t1:#C25A00; --t2:#0A64C9; --t3:#0E7A8C; --t4:#1F7A36; --t5:#C7254E; --t6:#4B49C8;
+  --font:'Noto Sans KR',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#000000; --card:#1C1C1E; --fg:#F2F2F7; --muted:#AEAEB2; --sep:#38383A; --fill:#2C2C2E;
+  --link:#4C9BFF; --on-link:#0B1220; --ok:#4ADE80; --bad:#FF7A70; --ok-bg:#12301C; --bad-bg:#3A1513;
+  --t1:#FFB340; --t2:#64A8FF; --t3:#5BD3E6; --t4:#4ADE80; --t5:#FF6B8A; --t6:#9B99FF; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#000000; --card:#1C1C1E; --fg:#F2F2F7; --muted:#AEAEB2; --sep:#38383A; --fill:#2C2C2E;
+  --link:#4C9BFF; --on-link:#0B1220; --ok:#4ADE80; --bad:#FF7A70; --ok-bg:#12301C; --bad-bg:#3A1513;
+  --t1:#FFB340; --t2:#64A8FF; --t3:#5BD3E6; --t4:#4ADE80; --t5:#FF6B8A; --t6:#9B99FF; color-scheme:dark }
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.55;word-break:keep-all;overflow-wrap:break-word}
+.wrap{max-width:520px;margin:0 auto;padding-block:18px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:12px}
+h1{margin:0;font-size:30px;font-weight:900;letter-spacing:-.03em;line-height:1.2;text-wrap:balance}
+h2{margin:14px 0 0 6px;font-size:19px;font-weight:900;letter-spacing:-.02em}
+p{margin:0}
+.muted{color:var(--muted)} .small{font-size:13px} .tiny{font-size:12px}
+.card{background:var(--card);border-radius:22px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.row{display:flex;align-items:center;gap:12px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.back{background:none;border:0;color:var(--link);font:inherit;font-size:17px;cursor:pointer;padding:8px 4px;min-height:44px}
+.btn{appearance:none;border:0;border-radius:14px;padding:11px 18px;font:inherit;font-weight:700;background:var(--link);color:var(--on-link);cursor:pointer;min-height:44px}
+.btn.ghost{background:var(--fill);color:var(--fg)}
+.btn:disabled{opacity:.45;cursor:default}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+label{font-size:14px;font-weight:700}
+input[type=text],input[type=number],textarea{font:inherit;width:100%;box-sizing:border-box;border:1.5px solid var(--sep);background:var(--card);color:var(--fg);border-radius:14px;padding:10px 14px;min-height:44px}
+textarea{resize:vertical;min-height:72px}
+:focus-visible{outline:3px solid var(--link);outline-offset:2px}
+.verse{border-left:4px solid var(--lc);border-radius:0;padding:2px 0 2px 14px}
+.chip{display:inline-flex;align-items:center;font-size:13px;font-weight:700;border-radius:999px;padding:3px 12px;background:var(--fill)}
+.ico{border-radius:16px;display:grid;place-items:center;flex:none}
+.apps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 8px;padding:6px 0}
+.app{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;color:var(--fg);font:inherit;cursor:pointer;padding:0;min-width:0}
+.app .ico{width:62px;height:62px}
+.app b{font-size:13px;font-weight:700;line-height:1.2;text-align:center}
+.app span{font-size:11px;color:var(--muted);line-height:1}
+.badge{position:absolute;right:-6px;top:-6px;width:22px;height:22px;border-radius:11px;background:var(--ok);color:var(--card);font-size:12px;font-weight:900;display:grid;place-items:center}
+.list{display:flex;flex-direction:column}
+.li{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--sep);align-items:flex-start}
+.li:last-child{border-bottom:0}
+.tick{appearance:none;flex:none;width:24px;height:24px;border-radius:12px;border:2px solid var(--muted);margin:0;cursor:pointer;display:grid;place-items:center}
+.tick:checked{background:var(--lc,var(--link));border-color:var(--lc,var(--link))}
+.tick:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.days{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.day{width:32px;height:32px;border-radius:16px;border:0;background:var(--fill);color:var(--fg);font:inherit;font-size:12px;cursor:pointer}
+.day[aria-pressed=true]{background:var(--lc);color:#fff;font-weight:700}
+.seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;background:var(--fill);border-radius:12px;padding:3px}
+.seg button{border:0;background:none;color:var(--fg);font:inherit;font-size:12px;border-radius:9px;padding:8px 2px;cursor:pointer;min-height:36px}
+.seg button[aria-pressed=true]{background:var(--card);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.out img{display:block;width:100%;border-radius:16px}
+.note{font-size:13px;color:var(--muted)}
+.bar{height:12px;border-radius:6px;background:var(--fill);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px}
+.qa{font-size:20px;font-weight:700;line-height:1.5;letter-spacing:-.01em}
+.verdict{border-radius:14px;padding:12px 14px;font-size:15px}
+.verdict.ok{background:var(--ok-bg);color:var(--ok)} .verdict.bad{background:var(--bad-bg);color:var(--bad)}
+.pager{display:flex;gap:4px}.pager i{width:8px;height:8px;border-radius:4px;background:var(--sep)}.pager i.on{background:var(--lc);width:20px}
+.warn{background:var(--bad-bg);color:var(--bad);border-radius:14px;padding:10px 14px;font-size:13px}
+.compass-wrap{display:flex;gap:16px;align-items:center}
+.compass-wrap svg{flex:none}
+.themes{display:flex;gap:10px;flex-wrap:wrap}
+.sw{width:44px;height:44px;border-radius:22px;border:3px solid transparent;cursor:pointer}
+.sw[aria-pressed=true]{border-color:var(--link)}
+@media (max-width:380px){.apps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (prefers-reduced-motion:no-preference){.card{animation:in .25s ease-out both}@keyframes in{from{transform:translateY(6px);opacity:.6}to{transform:none;opacity:1}}}
+</style>
+
+<div class="wrap" id="app" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+const KEY='faith-compass-v1';
+const ICON={
+  person:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/>',
+  bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+  send:'<path d="M3 11l18-8-8 18-2-8z"/>',
+  people:'<circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 14c3 0 5.5 2 5.5 5"/>',
+  sprout:'<path d="M12 21v-9"/><path d="M12 12c0-4 3-7 8-7 0 5-3 7-8 7z"/><path d="M12 14c0-3-2-5-6-5 0 4 2 5 6 5z"/>',
+  compass:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+  card:'<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="9" cy="12" r="2.5"/><path d="M14 10h4M14 14h3"/>',
+  sync:'<path d="M4 12a8 8 0 0 1 14-5.3L20 9M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M20 4v5h-5M4 20v-5h5"/>'
+};
+const svgIcon=(k,size,stroke)=>`<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${stroke||'#fff'}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
+
+const DIRS={c:{name:'중심',fill:'#FF9F0A',ink:'#1C1C1E'},n:{name:'북',fill:'#0A84FF',ink:'#FFFFFF'},e:{name:'동',fill:'#30B0C7',ink:'#1C1C1E'},s:{name:'남',fill:'#34C759',ink:'#1C1C1E'},w:{name:'서',fill:'#FF375F',ink:'#FFFFFF'},b:{name:'테두리',fill:'#5E5CE6',ink:'#FFFFFF'}};
+const LESSONS=[
+ {id:'l1',n:1,cell:'c',title:'나는 누구인가',theme:'정체성',fill:'#FF9F0A',tv:'--t1',icon:'person',
+  verse:'하나님이 자기 형상 곧 하나님의 형상대로 사람을 창조하시되',ref:'창세기 1:27',
+  ask:'나는 어떤 하나님의 자녀인가요?',before:'나는',after:'하나님의 자녀',ph:'예: 사랑받는, 존귀한',
+  missions:[['매일 아침 거울 보며 “나는 하나님의 형상이다” 말하기','daily'],['시편 139편 소리 내어 읽기'],['비교하게 하는 계정 숨기기'],['친구에게 좋은 점 말해주기']]},
+ {id:'l2',n:2,cell:'n',title:'무엇이 진짜인가',theme:'진리',fill:'#0A84FF',tv:'--t2',icon:'search',
+  verse:'예수께서 이르시되 내가 곧 길이요 진리요 생명이니',ref:'요한복음 14:6',
+  ask:'흔들릴 때 붙잡을 말씀 한 구절',before:'',after:'',ph:'예: 요한복음 14:6 내가 곧 길이요',
+  missions:[['공유하기 전에 출처 확인하기','three'],['체크리스트를 폰 메모에 저장'],['요한복음 14:6 외우기'],['본 가짜 정보 다음 주에 나누기']]},
+ {id:'l3',n:3,cell:'e',title:'정답과 지혜',theme:'지혜',fill:'#30B0C7',tv:'--t3',icon:'bulb',
+  verse:'너희 중에 누구든지 지혜가 부족하거든 … 하나님께 구하라 그리하면 주시리라',ref:'야고보서 1:5',
+  ask:'중요한 결정 전에 나에게 던질 질문',before:'',after:'',ph:'예: 이 선택이 하나님을 기쁘시게 할까?',
+  missions:[['결정 전, AI보다 먼저 30초 기도하기'],['잠언 한 장 읽고 남는 구절 적기'],['믿음의 어른께 고민 물어보기'],['결정 전 나의 질문 써 먹기']]},
+ {id:'l4',n:4,cell:'s',title:'알고리즘 vs 부르심',theme:'부르심',fill:'#34C759',tv:'--t4',icon:'send',
+  verse:'너희는 이 세대를 본받지 말고 오직 마음을 새롭게 함으로 변화를 받아',ref:'로마서 12:2',
+  ask:'내가 앞으로 걸어갈 방향',before:'',after:'',ph:'예: 약한 사람 편에 서는 사람',
+  missions:[['숏폼 시간 하루 30분 줄이기','daily'],['비교 콘텐츠에 ‘관심 없음’ 5번'],['영상 대신 10분 말씀 묵상'],['로마서 12:2 외우기']]},
+ {id:'l5',n:5,cell:'w',title:'누구와 함께하는가',theme:'공동체',fill:'#FF375F',tv:'--t5',icon:'people',
+  verse:'서로 돌아보아 사랑과 선행을 격려하며',ref:'히브리서 10:24',
+  ask:'믿음의 길을 함께 걸을 사람',before:'',after:'',ph:'예: 친구, 가족, 교회 선생님 이름',
+  missions:[['오늘 쓴 손편지 직접 전해주기'],['AI 대신 사람에게 고민 나누기'],['뜸했던 교회 친구에게 먼저 연락'],['다음 주 예배에 친구와 함께 오기']]},
+ {id:'l6',n:6,cell:'b',title:'선한 청지기',theme:'청지기',fill:'#5E5CE6',tv:'--t6',icon:'sprout',
+  verse:'무엇을 하든지 다 하나님의 영광을 위하여 하라',ref:'고린도전서 10:31',
+  ask:'AI를 쓰는 나의 다짐 한 줄',before:'',after:'',ph:'예: AI보다 먼저 기도하는 사람',
+  missions:[['완성한 카드를 지갑이나 폰케이스에 넣기'],['나침반 배경화면으로 저장하기'],['선한 프롬프트로 이웃 한 번 돕기'],['한 달 뒤 서약서 다시 읽기']]}
+];
+const CHECK_Q=['숙제나 공부할 때 AI를 사용한다','고민이 있을 때 AI에게 털어놓는다','하루 2시간 이상 숏폼 영상을 본다','성경을 읽거나 묵상한다','고민을 친구나 선생님과 나눈다'];
+const CHECK_A=['거의 안 함','가끔','자주','매일'];
+const QUIZ=[
+ ['성경(개신교)은 구약 39권, 신약 27권으로 모두 66권이다.',true,'맞아요. 구약 39권과 신약 27권을 합해 66권이에요.'],
+ ['시편은 151편까지 있다.',false,'가짜예요. 개역개정 성경의 시편은 150편이에요. 그럴듯한 숫자가 가장 속기 쉬워요.'],
+ ['요한복음 14:6에 “내가 곧 길이요 진리요 생명이니”라는 말씀이 있다.',true,'맞아요. 오늘 2과의 말씀이에요.'],
+ ['고린도전서 13장은 ‘믿음장’으로 불린다.',false,'가짜예요. 고린도전서 13장은 ‘사랑장’, 믿음장은 히브리서 11장이에요.'],
+ ['다니엘이 사자 굴에 들어간 이야기는 창세기에 나온다.',false,'가짜예요. 다니엘서 6장에 나와요. 책 이름만 바꿔도 그럴듯해 보여요.'],
+ ['솔로몬은 하나님께 ‘듣는 마음’을 구했다. (열왕기상 3:9)',true,'맞아요. 3과에서 다시 만나게 될 장면이에요.'],
+ ['산상수훈은 마태복음 5~7장에 기록되어 있다.',true,'맞아요. 팔복도 마태복음 5장에 있어요.'],
+ ['야고보서 1:5는 “지혜가 부족하거든 많이 검색하라”고 말한다.',false,'가짜예요. “하나님께 구하라 그리하면 주시리라”예요.'],
+ ['구약의 마지막 책은 말라기이다.',true,'맞아요. 말라기 다음은 신약의 마태복음이에요.'],
+ ['로마서 12:2에는 “이 세대를 본받지 말고”라는 말씀이 있다.',true,'맞아요. 4과에서 함께 읽을 말씀이에요.']
+];
+const DAYS=['월','화','수','목','금','토','일'];
+
+let storageOK=true;
+function load(){try{const t=localStorage.getItem(KEY);return t?JSON.parse(t):{}}catch(e){storageOK=false;return{}}}
+let S=Object.assign({nick:'',cells:{},missions:{},pre:null,post:null,profile:{},quiz:{},decide:{},screen:{},cheer:{},pledge:{},wall:{theme:'night'}},load());
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){storageOK=false}}
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=s=>document.querySelector(s);
+const app=$('#app');
+const filled=()=>Object.keys(DIRS).filter(k=>(S.cells[k]||'').trim()).length;
+const L=id=>LESSONS.find(l=>l.id===id);
+function cellText(k){const v=(S.cells[k]||'').trim();if(!v)return'';if(k==='c')return`나는 ${v} 하나님의 자녀`;return v}
+
+function compassSVG(size,hi){
+  const on=k=>(S.cells[k]||'').trim();
+  const pos={n:[105,44],e:[166,105],s:[105,166],w:[44,105]};
+  let dots='';
+  for(const k of ['n','e','s','w']){const [x,y]=pos[k],d=DIRS[k],f=on(k);
+    dots+=`<circle cx="${x}" cy="${y}" r="21" fill="${f?d.fill:'var(--fill)'}"/>`+(hi===k?`<circle cx="${x}" cy="${y}" r="27" fill="none" stroke="${d.fill}" stroke-width="2.5" stroke-dasharray="4 4"/>`:'')+
+      `<text x="${x}" y="${y+6}" text-anchor="middle" font-size="16" font-weight="900" fill="${f?d.ink:'var(--muted)'}">${d.name}</text>`;}
+  const c=DIRS.c,cf=on('c'),bf=on('b');
+  return `<svg width="${size}" height="${size}" viewBox="0 0 210 210" role="img" aria-label="나의 믿음 나침반, 여섯 칸 중 ${filled()}칸 채움" style="font-family:var(--font)">
+   <circle cx="105" cy="105" r="98" fill="none" stroke="${bf?DIRS.b.fill:'var(--sep)'}" stroke-width="10"/>
+   ${hi==='b'?'<circle cx="105" cy="105" r="104" fill="none" stroke="#5E5CE6" stroke-width="2" stroke-dasharray="5 5"/>':''}
+   <circle cx="105" cy="105" r="88" fill="var(--bg)"/>
+   <line x1="105" y1="40" x2="105" y2="170" stroke="var(--sep)" stroke-width="1.5"/><line x1="40" y1="105" x2="170" y2="105" stroke="var(--sep)" stroke-width="1.5"/>
+   ${dots}
+   <circle cx="105" cy="105" r="26" fill="${cf?c.fill:'var(--fill)'}"/>${hi==='c'?'<circle cx="105" cy="105" r="32" fill="none" stroke="#FF9F0A" stroke-width="2.5" stroke-dasharray="4 4"/>':''}
+   <text x="105" y="111" text-anchor="middle" font-size="15" font-weight="900" fill="${cf?c.ink:'var(--muted)'}">중심</text></svg>`;
+}
+
+/* ---------- canvas helpers ---------- */
+async function fontsReady(){try{await Promise.all([document.fonts.load('900 40px "Noto Sans KR"'),document.fonts.load('500 40px "Noto Sans KR"'),document.fonts.load('700 40px "Noto Sans KR"')])}catch(e){}}
+const FF='"Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+function wrapText(ctx,text,x,y,maxW,lh,maxLines){
+  const out=[];let line='';
+  for(const ch of String(text)){const t=line+ch;if(ctx.measureText(t).width>maxW&&line){out.push(line);line=ch.trim()?ch:'';}else line=t;}
+  if(line)out.push(line);
+  const lines=maxLines?out.slice(0,maxLines):out;
+  if(maxLines&&out.length>maxLines){let l=lines[maxLines-1];while(ctx.measureText(l+'…').width>maxW&&l)l=l.slice(0,-1);lines[maxLines-1]=l+'…';}
+  lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lh));return lines.length;
+}
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function showImage(holder,canvas,label){
+  const url=canvas.toDataURL('image/png');
+  holder.innerHTML=`<img alt="${esc(label)}" src="${url}"><p class="note">이미지를 <b>길게 눌러</b> 사진에 저장하세요. 컴퓨터에서는 마우스 오른쪽 버튼으로 저장할 수 있어요.</p>`;
+  holder.hidden=false;holder.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ---------- shared pieces ---------- */
+function topbar(back,right){return `<div class="top"><button class="back" data-go="${back||''}">‹ 홈</button><span class="small muted">${right||''}</span></div>`}
+function lessonHead(l){return `<div class="row"><div class="ico" style="width:64px;height:64px;background:${l.fill}">${svgIcon(l.icon,32)}</div>
+  <div style="min-width:0"><span class="small" style="font-weight:700;color:var(${l.tv})">${l.n}과 · 나침반 ${DIRS[l.cell].name}</span><h1>${l.title}</h1></div></div>
+  <div class="card"><div class="verse" style="--lc:${l.fill}"><p style="font-size:17px;font-weight:500">${l.verse}</p><p class="small muted">${l.ref}</p></div></div>`}
+
+function cellBlock(l){
+  const v=S.cells[l.cell]||'';
+  return `<h2>나침반 세우기 <span class="small muted" style="font-weight:500">오늘 채울 칸 · ${DIRS[l.cell].name}</span></h2>
+  <div class="card" style="border:2px solid ${l.fill}">
+    <div class="compass-wrap">${compassSVG(104,l.cell)}<div style="min-width:0;flex:1"><p style="font-weight:700">${l.ask}</p><p class="small muted">교재에 쓴 문장을 그대로 옮겨 적어요.</p></div></div>
+    <div class="row" style="flex-wrap:wrap;gap:8px">${l.before?`<span style="font-weight:900">${l.before}</span>`:''}
+      <input type="text" id="cell-${l.cell}" maxlength="60" value="${esc(v)}" placeholder="${esc(l.ph)}" aria-label="${esc(l.ask)}" style="flex:1;min-width:160px">
+      ${l.after?`<span style="font-weight:900">${l.after}</span>`:''}</div>
+    <div class="btns"><button class="btn" id="save-cell" style="background:${l.fill};color:${DIRS[l.cell].ink}">나침반에 저장</button><span id="cell-msg" class="small muted" style="align-self:center"></span></div>
+  </div>`;
+}
+function bindCell(l){
+  $('#save-cell').onclick=()=>{const v=$('#cell-'+l.cell).value.trim();S.cells[l.cell]=v;save();
+    $('#cell-msg').textContent=v?`저장했어요 · ${filled()} / 6칸`:'칸을 비웠어요';
+    const w=document.querySelector('.compass-wrap svg');if(w)w.outerHTML=compassSVG(104,l.cell);};
+}
+function missionBlock(l){
+  const m=S.missions[l.id]||{done:[],days:[],three:[]};
+  const rows=l.missions.map(([t,kind],i)=>{
+    let extra='';
+    if(kind==='daily')extra=`<div class="days" role="group" aria-label="요일별 체크">${DAYS.map((d,j)=>`<button class="day" data-day="${j}" aria-pressed="${!!(m.days||[])[j]}">${d}</button>`).join('')}</div>`;
+    if(kind==='three')extra=`<div class="days" role="group" aria-label="횟수 체크">${[0,1,2].map(j=>`<button class="day" data-three="${j}" aria-pressed="${!!(m.three||[])[j]}">${j+1}</button>`).join('')}</div>`;
+    return `<div class="li"><input type="checkbox" class="tick" id="m-${i}" ${m.done&&m.done[i]?'checked':''}><div style="min-width:0"><label for="m-${i}" style="font-weight:500;font-size:15px">${t}</label>${extra}</div></div>`}).join('');
+  return `<h2>한 주 미션 <span class="small muted" style="font-weight:500" id="m-count"></span></h2><div class="card" style="--lc:${l.fill}"><div class="list">${rows}</div></div>`;
+}
+function bindMissions(l){
+  const m=S.missions[l.id]=S.missions[l.id]||{done:[],days:[],three:[]};
+  const count=()=>{$('#m-count').textContent=`${(m.done||[]).filter(Boolean).length} / ${l.missions.length}`};count();
+  l.missions.forEach((_,i)=>{$('#m-'+i).onchange=e=>{m.done[i]=e.target.checked;save();count();}});
+  document.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{const j=+b.dataset.day;m.days[j]=!m.days[j];b.setAttribute('aria-pressed',!!m.days[j]);save();});
+  document.querySelectorAll('[data-three]').forEach(b=>b.onclick=()=>{const j=+b.dataset.three;m.three[j]=!m.three[j];b.setAttribute('aria-pressed',!!m.three[j]);save();});
+}
+function storageWarn(){return storageOK?'':`<div class="warn">이 브라우저에서는 기록이 저장되지 않아요. 만든 카드는 이미지로 꼭 저장해 두세요.</div>`}
+
+/* ---------- views ---------- */
+function viewHome(){
+  const n=filled();
+  const apps=[['intro','들어가며','시작','#1C1C1E','compass'],...LESSONS.map(l=>[l.id,l.theme,l.n+'과',l.fill,l.icon]),['card','나침반 카드','부록','#FFF4E5','card']];
+  app.innerHTML=`${storageWarn()}
+  <div class="top"><span class="small muted" style="font-weight:700">믿음의 나침반 · 6주 여정</span><button class="back" data-go="backup" style="font-size:14px">기록 옮기기</button></div>
+  <h1>디지털 나침반</h1>
+  ${S.nick?'':`<div class="card"><label for="nick">별명을 정해 주세요</label><p class="small muted">실제 이름 대신 별명을 써요. 이 휴대폰에만 저장돼요.</p><div class="row"><input type="text" id="nick" maxlength="12" placeholder="예: 별빛" style="flex:1"><button class="btn" id="nick-go">시작</button></div></div>`}
+  <div class="card"><div class="compass-wrap">${compassSVG(116)}
+    <div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:6px"><span class="small" style="font-weight:700;color:var(--t1)">나의 나침반</span>
+    <span style="font-size:20px;font-weight:900;line-height:1.25;overflow-wrap:anywhere">${S.nick?esc(S.nick)+'의<br>나침반':'나의<br>나침반'}</span>
+    <div><div class="row small muted" style="justify-content:space-between"><span>채운 칸</span><b style="color:var(--fg)">${n} / 6</b></div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:4px">${['c','n','e','s','w','b'].map(k=>`<i style="height:7px;border-radius:4px;background:${(S.cells[k]||'').trim()?DIRS[k].fill:'var(--fill)'}"></i>`).join('')}</div></div></div></div></div>
+  <div class="apps">${apps.map(([id,name,sub,bg,ic])=>{const done=id.startsWith('l')&&(S.cells[L(id).cell]||'').trim();
+    return `<button class="app" data-go="${id}"><span class="ico" style="background:${bg};position:relative">${svgIcon(ic,30,id==='card'?'#C25A00':'#fff')}${done?'<i class="badge" aria-label="칸 채움">✓</i>':''}</span><span>${sub}</span><b>${name}</b></button>`}).join('')}</div>
+  <p class="note" style="text-align:center">교재의 QR을 찍으면 그 과로 바로 들어와요.</p>`;
+  const go=$('#nick-go');if(go)go.onclick=()=>{const v=$('#nick').value.trim();if(!v){$('#nick').focus();return;}S.nick=v;save();render();};
+}
+
+function checkForm(key,title){
+  const val=S[key]||[];
+  return `<div class="card"><p style="font-weight:700">${title}</p>${CHECK_Q.map((q,i)=>`<div style="display:flex;flex-direction:column;gap:6px;padding:6px 0"><span style="font-size:15px">${q}</span>
+    <div class="seg" role="group" aria-label="${esc(q)}">${CHECK_A.map((a,j)=>`<button data-ck="${key}" data-q="${i}" data-a="${j}" aria-pressed="${val[i]===j}">${a}</button>`).join('')}</div></div>`).join('')}
+    <p class="small muted" id="ck-msg-${key}"></p></div>`;
+}
+function bindCheck(key,after){
+  document.querySelectorAll(`[data-ck="${key}"]`).forEach(b=>b.onclick=()=>{S[key]=S[key]||[];const i=+b.dataset.q;S[key][i]=+b.dataset.a;save();
+    document.querySelectorAll(`[data-ck="${key}"][data-q="${i}"]`).forEach(x=>x.setAttribute('aria-pressed',x===b));
+    const left=CHECK_Q.filter((_,k)=>S[key][k]===undefined||S[key][k]===null).length;$('#ck-msg-'+key).textContent=left?`${left}개 남았어요`:'모두 저장했어요';if(after)after();});
+}
+
+function viewIntro(){
+  app.innerHTML=`${topbar('','시작하기')}
+  <div class="row"><div class="ico" style="width:64px;height:64px;background:#1C1C1E">${svgIcon('compass',32)}</div><div><span class="small muted" style="font-weight:700">들어가며</span><h1>나침반을 들고 떠나는 여행</h1></div></div>
+  <div class="card"><div class="verse" style="--lc:#FF9F0A"><p style="font-size:17px;font-weight:500">주의 말씀은 내 발에 등이요 내 길에 빛이니이다</p><p class="small muted">시편 119:105</p></div></div>
+  <div class="card"><p>6주 동안 한 과에 한 칸씩 나침반을 채워요. 교재에 쓴 문장을 여기에도 저장하면, 마지막에 휴대폰 배경화면으로 완성돼요.</p></div>
+  <h2>시작 전 나의 상태 체크</h2>
+  ${checkForm('pre','지금 나는 얼마나 자주 할까요?')}
+  <p class="note">6과에서 같은 질문에 다시 답하고, 무엇이 달라졌는지 비교해요.</p>`;
+  bindCheck('pre');
+}
+
+function viewLesson(l){
+  app.innerHTML=`${topbar('',`${l.n} / 6`)}${lessonHead(l)}<h2>오늘의 활동</h2><div id="act"></div>${cellBlock(l)}${missionBlock(l)}`;
+  ({l1:act1,l2:act2,l3:act3,l4:act4,l5:act5,l6:act6})[l.id](l);
+  bindCell(l);bindMissions(l);
+}
+
+/* 1과: 프로필 카드 */
+function act1(l){
+  const p=S.profile;const f=(k,lab,ph)=>`<div style="display:flex;flex-direction:column;gap:4px"><label for="p-${k}">${lab}</label><input type="text" id="p-${k}" maxlength="30" value="${esc(p[k]||'')}" placeholder="${ph}"></div>`;
+  $('#act').innerHTML=`<div class="card"><p style="font-weight:700">하나님이 보시는 나 · 프로필 카드</p><p class="small muted">교재 5쪽 오른쪽 프로필을 옮겨 적으면 카드 이미지가 만들어져요.</p>
+   ${f('who','나는 누구?','예: 하나님을 닮은 사람')}${f('worth','나의 가치','예: 값을 매길 수 없음')}${f('know','나를 아는 법','예: 지으신 분으로서')}${f('want','원하는 것','예: 사랑의 관계')}${f('name','부르는 이름','예: 내 자녀')}
+   <button class="btn" id="mk1" style="background:#FF9F0A;color:#1C1C1E">카드 만들기</button><div class="out" id="out1" hidden></div></div>`;
+  $('#mk1').onclick=async()=>{['who','worth','know','want','name'].forEach(k=>p[k]=$('#p-'+k).value.trim());save();await fontsReady();
+    const c=document.createElement('canvas');c.width=1080;c.height=1350;const x=c.getContext('2d');
+    x.fillStyle='#F2F2F7';x.fillRect(0,0,1080,1350);x.fillStyle='#FFFFFF';rr(x,60,60,960,1230,64);x.fill();
+    x.save();rr(x,60,60,960,1230,64);x.clip();x.fillStyle='#FF9F0A';x.fillRect(60,60,960,220);x.restore();
+    x.fillStyle='#1C1C1E';x.font=`700 34px ${FF}`;x.textAlign='right';x.fillText('하나님이 보시는 버전',960,130);x.textAlign='left';
+    x.fillStyle='#FFF4E5';x.beginPath();x.arc(220,290,100,0,7);x.fill();x.lineWidth=14;x.strokeStyle='#FFFFFF';x.stroke();
+    x.strokeStyle='#C25A00';x.lineWidth=10;x.lineJoin='round';x.beginPath();x.moveTo(220,340);x.bezierCurveTo(150,300,150,240,190,230);x.bezierCurveTo(205,226,215,235,220,248);x.bezierCurveTo(225,235,235,226,250,230);x.bezierCurveTo(290,240,290,300,220,340);x.stroke();
+    x.fillStyle='#1C1C1E';x.font=`900 72px ${FF}`;const nm=S.nick||'나';x.fillText(nm,120,470);const w=x.measureText(nm).width;
+    x.fillStyle='#0A64C9';x.beginPath();x.arc(120+w+40,446,24,0,7);x.fill();x.strokeStyle='#fff';x.lineWidth=7;x.beginPath();x.moveTo(120+w+28,447);x.lineTo(120+w+37,456);x.lineTo(120+w+54,436);x.stroke();
+    x.fillStyle='#C25A00';x.font=`500 34px ${FF}`;x.fillText('하나님의 자녀 · 창세기 1:27',120,525);
+    x.fillStyle='#FFE2BF';x.fillRect(120,570,840,2);x.fillRect(120,700,840,2);
+    [['형상','창 1:27'],['기묘','시 139:14'],['보배','사 43:4']].forEach(([a,b],i)=>{const cx=260+i*280;x.textAlign='center';x.fillStyle='#1C1C1E';x.font=`900 48px ${FF}`;x.fillText(a,cx,640);x.fillStyle='#6C6C70';x.font=`500 28px ${FF}`;x.fillText(b,cx,682);});
+    x.textAlign='left';
+    [['나는 누구?',p.who],['나의 가치',p.worth],['나를 아는 법',p.know],['원하는 것',p.want],['부르는 이름',p.name]].forEach(([a,b],i)=>{const y=780+i*100;x.fillStyle='#C25A00';x.font=`700 30px ${FF}`;x.fillText(a,120,y);x.fillStyle='#1C1C1E';x.font=`500 38px ${FF}`;wrapText(x,b||'',360,y,600,44,1);x.fillStyle='#FFE2BF';x.fillRect(120,y+30,840,2);});
+    x.fillStyle='#6C6C70';x.font=`500 26px ${FF}`;x.fillText('믿음의 나침반 · 1과 나는 누구인가',120,1250);
+    showImage($('#out1'),c,'하나님이 보시는 나 프로필 카드');};
+}
+
+/* 2과: 진짜일까 가짜일까 */
+function act2(l){
+  const st=S.quiz;st.i=st.i||0;st.score=st.score||0;st.ans=st.ans||[];
+  const draw=()=>{
+    if(st.i>=QUIZ.length){$('#act').innerHTML=`<div class="card"><p class="qa">${QUIZ.length}문제 중 ${st.score}개를 맞혔어요</p>
+      <p>AI도 이렇게 그럴듯하게 틀릴 수 있어요. 믿기 전에 성경을 직접 펴서 확인하는 습관이 분별의 시작이에요.</p>
+      <div class="card" style="background:var(--bg)"><p class="small" style="font-weight:700">나만의 분별 체크리스트 예시</p><p class="small">· 이 정보의 출처는 어디인가?<br>· 다른 곳에서도 확인되는가?<br>· 성경과 맞는가?</p></div>
+      <button class="btn ghost" id="q-re">다시 풀기</button></div>`;$('#q-re').onclick=()=>{S.quiz={};save();act2(l)};return;}
+    const [q,ok,ex]=QUIZ[st.i];const a=st.ans[st.i];
+    $('#act').innerHTML=`<div class="card" style="--lc:${l.fill}"><div class="row" style="justify-content:space-between"><span class="chip" style="color:var(--t2)">진짜일까 가짜일까?</span><span class="small muted">${st.i+1} / ${QUIZ.length}</span></div>
+      <p class="qa">${q}</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn" data-q="1" ${a!==undefined?'disabled':''}>진짜</button><button class="btn ghost" data-q="0" ${a!==undefined?'disabled':''}>가짜</button></div>
+      ${a!==undefined?`<div class="verdict ${a===ok?'ok':'bad'}"><b>${a===ok?'정답이에요.':'아쉬워요.'}</b> ${ex}</div><button class="btn" id="q-next">${st.i+1<QUIZ.length?'다음 문제':'결과 보기'}</button>`:''}
+      <p class="note">점수 ${st.score}점</p></div>`;
+    document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{const v=b.dataset.q==='1';st.ans[st.i]=v;if(v===ok)st.score++;save();draw();});
+    const nx=$('#q-next');if(nx)nx.onclick=()=>{st.i++;save();draw();};
+  };draw();
+}
+
+/* 3과: 결정 도우미 */
+function act3(l){
+  const d=S.decide;const qs=['이 선택이 하나님을 기쁘시게 할까?','10년 뒤의 나도 이 선택을 응원할까?','믿음의 어른은 뭐라고 하실까?'];
+  $('#act').innerHTML=`<div class="card"><p style="font-weight:700">결정 전 세 가지 질문</p><p class="small muted">AI에게 묻기 전에, 지금 고민을 세 질문에 비춰 봐요. 이 내용은 이 휴대폰에만 남아요.</p>
+   <label for="d-q">나의 고민</label><textarea id="d-q" maxlength="200" placeholder="예: 친구가 시험 때 답을 보여 달라고 해요">${esc(d.q||'')}</textarea>
+   ${qs.map((q,i)=>`<label for="d-${i}" style="color:var(--t3)">${q}</label><textarea id="d-${i}" maxlength="200">${esc((d.a||[])[i]||'')}</textarea>`).join('')}
+   <label for="d-v">함께 붙잡을 말씀</label><input type="text" id="d-v" maxlength="60" value="${esc(d.v||'')}" placeholder="예: 야고보서 1:5">
+   <div class="btns"><button class="btn" id="d-save" style="background:#30B0C7;color:#1C1C1E">저장</button><span class="small muted" id="d-msg" style="align-self:center"></span></div></div>`;
+  $('#d-save').onclick=()=>{d.q=$('#d-q').value;d.a=qs.map((_,i)=>$('#d-'+i).value);d.v=$('#d-v').value;save();$('#d-msg').textContent='저장했어요. 아래에서 나만의 질문으로 동쪽 칸을 채워요.';};
+}
+
+/* 4과: 스크린 타임 */
+function act4(l){
+  const s=S.screen;const cats=[['short','숏폼','#FF375F'],['game','게임','#5E5CE6'],['msg','메시지·SNS','#0A84FF'],['study','공부','#34C759'],['etc','기타','#8E8E93']];
+  $('#act').innerHTML=`<div class="card"><p style="font-weight:700">나의 하루 스크린 타임</p><p class="small muted">휴대폰 설정의 스크린 타임(사용 시간)을 열어 어제 사용한 시간을 분 단위로 적어요.</p>
+   ${cats.map(([k,n])=>`<div class="row"><label for="s-${k}" style="width:96px;flex:none">${n}</label><input type="number" inputmode="numeric" min="0" max="1440" id="s-${k}" value="${s[k]??''}" placeholder="0" style="flex:1"><span class="small muted">분</span></div>`).join('')}
+   <div id="s-out" style="display:flex;flex-direction:column;gap:8px"></div></div>`;
+  const draw=()=>{cats.forEach(([k])=>{const v=parseInt($('#s-'+k).value,10);s[k]=isNaN(v)?'':Math.max(0,Math.min(1440,v));});save();
+    const tot=cats.reduce((a,[k])=>a+(+s[k]||0),0),mx=Math.max(1,...cats.map(([k])=>+s[k]||0));const h=Math.floor(tot/60),m=tot%60;
+    $('#s-out').innerHTML=tot?`<p style="font-size:26px;font-weight:900;letter-spacing:-.02em">${h?h+'시간 ':''}${m}분</p>
+      ${cats.filter(([k])=>+s[k]).map(([k,n,c])=>`<div><div class="row small" style="justify-content:space-between"><span>${n}</span><span class="muted" style="font-variant-numeric:tabular-nums">${s[k]}분</span></div><div class="bar"><i style="width:${(+s[k])/mx*100}%;background:${c}"></i></div></div>`).join('')}
+      <p class="small" style="background:var(--ok-bg);color:var(--ok);border-radius:12px;padding:10px 12px">숏폼을 하루 30분만 줄여도 1년이면 약 182시간이에요. 그 시간으로 무엇을 하고 싶나요?</p>`:'<p class="note">숫자를 넣으면 그래프가 나타나요.</p>';};
+  cats.forEach(([k])=>$('#s-'+k).oninput=draw);draw();
+}
+
+/* 5과: 응원 카드 */
+function act5(l){
+  const c5=S.cheer;const verses=[['서로 돌아보아 사랑과 선행을 격려하며','히브리서 10:24'],['두 사람이 한 사람보다 나음은','전도서 4:9'],['세 겹 줄은 쉽게 끊어지지 아니하느니라','전도서 4:12']];
+  $('#act').innerHTML=`<div class="card"><p style="font-weight:700">응원 카드 만들기</p><p class="small muted">손편지를 전한 뒤, 결석한 친구나 멀리 있는 친구에게 보낼 카드를 만들어요.</p>
+   <label for="c-to">받는 친구</label><input type="text" id="c-to" maxlength="12" value="${esc(c5.to||'')}" placeholder="친구 이름">
+   <label for="c-msg">응원 한마디</label><textarea id="c-msg" maxlength="120" placeholder="예: 다음 주에 같이 예배 가자!">${esc(c5.msg||'')}</textarea>
+   <span style="font-size:14px;font-weight:700">함께 보낼 말씀</span><div class="btns" role="group" aria-label="말씀 고르기">${verses.map((v,i)=>`<button class="btn ghost" data-v="${i}" aria-pressed="${(c5.v||0)===i}" style="font-weight:500;font-size:14px;${(c5.v||0)===i?'outline:2px solid #FF375F':''}">${v[1]}</button>`).join('')}</div>
+   <button class="btn" id="mk5" style="background:#FF375F;color:#fff">카드 만들기</button><div class="out" id="out5" hidden></div></div>`;
+  document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{c5.v=+b.dataset.v;save();act5(l);});
+  $('#mk5').onclick=async()=>{c5.to=$('#c-to').value.trim();c5.msg=$('#c-msg').value.trim();save();await fontsReady();
+    const c=document.createElement('canvas');c.width=1080;c.height=1350;const x=c.getContext('2d');
+    x.fillStyle='#FFE8ED';x.fillRect(0,0,1080,1350);x.fillStyle='#FFFDF7';rr(x,70,70,940,1210,56);x.fill();
+    x.fillStyle='#FF375F';x.beginPath();const hx=880,hy=200;x.moveTo(hx,hy+40);x.bezierCurveTo(hx-70,hy,hx-60,hy-55,hx-25,hy-55);x.bezierCurveTo(hx-10,hy-55,hx,hy-45,hx,hy-30);x.bezierCurveTo(hx,hy-45,hx+10,hy-55,hx+25,hy-55);x.bezierCurveTo(hx+60,hy-55,hx+70,hy,hx,hy+40);x.fill();
+    x.fillStyle='#C7254E';x.font=`700 40px ${FF}`;x.fillText('To.',150,220);x.fillStyle='#1C1C1E';x.font=`900 64px ${FF}`;x.fillText(c5.to||'친구',230,222);
+    x.fillStyle='#EADFC8';for(let i=0;i<6;i++)x.fillRect(150,350+i*96,780,2);
+    x.fillStyle='#1C1C1E';x.font=`500 46px ${FF}`;wrapText(x,c5.msg||'너를 응원해!',150,330,780,96,6);
+    const v=verses[c5.v||0];x.fillStyle='#FFE8ED';rr(x,150,960,780,170,28);x.fill();x.fillStyle='#7A1530';x.font=`500 36px ${FF}`;wrapText(x,v[0],190,1030,700,48,2);x.font=`700 28px ${FF}`;x.fillText(v[1],190,1105);
+    x.textAlign='right';x.fillStyle='#C7254E';x.font=`700 40px ${FF}`;x.fillText('From. '+(S.nick||''),930,1215);
+    showImage($('#out5'),c,'친구에게 보낼 응원 카드');};
+}
+
+/* 6과: 서약서 + 다시 체크 */
+function act6(l){
+  const p=S.pledge;
+  $('#act').innerHTML=`<div class="card" style="border:2px solid #5E5CE6"><p style="font-weight:900;font-size:18px">AI 사용 서약서</p><p class="small muted">나는 하나님이 맡기신 도구인 AI를 선하게 쓰는 청지기가 되겠습니다.</p>
+   <label for="pl-0">1. 나는 AI를 ___에 사용하겠습니다.</label><input type="text" id="pl-0" maxlength="40" value="${esc((p.a||[])[0]||'')}">
+   <label for="pl-1">2. 나는 AI를 ___에는 사용하지 않겠습니다.</label><input type="text" id="pl-1" maxlength="40" value="${esc((p.a||[])[1]||'')}">
+   <label for="pl-2">3. 나는 AI보다 먼저 ___하겠습니다.</label><input type="text" id="pl-2" maxlength="40" value="${esc((p.a||[])[2]||'')}">
+   <div class="btns"><button class="btn" id="pl-save" style="background:#5E5CE6;color:#fff">서명하고 저장</button><span class="small muted" id="pl-msg" style="align-self:center">${p.date?`${esc(p.date)} 서명함`:''}</span></div></div>
+   <h2>6주 뒤 다시 체크</h2>${checkForm('post','지금 나는 얼마나 자주 할까요?')}<div id="cmp"></div>
+   <button class="btn" data-go="card" style="background:#1C1C1E;color:#fff">나침반 카드 · 배경화면 만들기 ›</button>`;
+  $('#pl-save').onclick=()=>{p.a=[0,1,2].map(i=>$('#pl-'+i).value.trim());const d=new Date();p.date=`${d.getFullYear()}. ${d.getMonth()+1}. ${d.getDate()}.`;save();$('#pl-msg').textContent=`${p.date} 서명함`;};
+  const cmp=()=>{const a=S.pre||[],b=S.post||[];if(!a.length||!b.length){$('#cmp').innerHTML=a.length?'':'<p class="note">‘들어가며’에서 시작 전 체크를 하면 변화를 비교해 볼 수 있어요.</p>';return;}
+    $('#cmp').innerHTML=`<div class="card"><p style="font-weight:700">6주 동안 달라진 점</p>${CHECK_Q.map((q,i)=>{if(a[i]==null||b[i]==null)return'';const d=b[i]-a[i];
+      return `<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--sep);padding:6px 0"><span class="small" style="min-width:0">${q}</span><span class="small" style="flex:none;font-weight:700">${CHECK_A[a[i]]} → ${CHECK_A[b[i]]}</span></div>`}).join('')}</div>`;};
+  bindCheck('post',cmp);cmp();
+}
+
+/* 부록: 나침반 카드 · 배경화면 */
+const THEMES={night:{bg:'#1C1C1E',card:'#2C2C2E',fg:'#FFFFFF',mut:'#AEAEB2',sep:'#48484A',name:'밤하늘'},dawn:{bg:'#F2F2F7',card:'#FFFFFF',fg:'#1C1C1E',mut:'#6C6C70',sep:'#E5E5EA',name:'새벽'},sun:{bg:'#FF9F0A',card:'#FFF4E5',fg:'#1C1C1E',mut:'#5C2A00',sep:'#FFD199',name:'햇살'},deep:{bg:'#2E2C8A',card:'#3B39A8',fg:'#FFFFFF',mut:'#C9C8FF',sep:'#5250C0',name:'깊은 바다'},mint:{bg:'#E3F6F9',card:'#FFFFFF',fg:'#0B4F5C',mut:'#0E7A8C',sep:'#B5E6EE',name:'민트'}};
+function viewCard(){
+  const th=S.wall.theme||'night';
+  app.innerHTML=`${topbar('','부록')}
+  <div class="row"><div class="ico" style="width:64px;height:64px;background:#FFF4E5">${svgIcon('card',32,'#C25A00')}</div><div><span class="small" style="font-weight:700;color:var(--t1)">부록 · 6주의 열매</span><h1>나의 믿음 나침반 카드</h1></div></div>
+  <div class="card"><div class="compass-wrap">${compassSVG(110)}<div class="list" style="flex:1;min-width:0">${['c','n','e','s','w','b'].map(k=>`<div class="li" style="padding:6px 0"><span class="chip" style="flex:none;background:${DIRS[k].fill};color:${DIRS[k].ink}">${DIRS[k].name}</span><span class="small" style="min-width:0;overflow-wrap:anywhere">${esc(cellText(k))||'<span class="muted">아직 비어 있어요</span>'}</span></div>`).join('')}</div></div>
+   <p class="note">${filled()<6?`${6-filled()}칸이 남았어요. 각 과 화면에서 채울 수 있어요.`:'여섯 칸을 모두 채웠어요!'}</p></div>
+  <h2>배경화면 만들기</h2>
+  <div class="card"><span style="font-size:14px;font-weight:700">색 고르기</span><div class="themes" role="group" aria-label="배경 색">${Object.entries(THEMES).map(([k,t])=>`<button class="sw" data-th="${k}" aria-pressed="${k===th}" aria-label="${t.name}" title="${t.name}" style="background:${t.bg};box-shadow:inset 0 0 0 1px ${t.sep}"></button>`).join('')}</div>
+   <button class="btn" id="mkw">배경화면 이미지 만들기</button><div class="out" id="outw" hidden></div></div>`;
+  document.querySelectorAll('[data-th]').forEach(b=>b.onclick=()=>{S.wall.theme=b.dataset.th;save();document.querySelectorAll('[data-th]').forEach(x=>x.setAttribute('aria-pressed',x===b));});
+  $('#mkw').onclick=async()=>{await fontsReady();const t=THEMES[S.wall.theme||'night'];
+    const c=document.createElement('canvas');c.width=1170;c.height=2532;const x=c.getContext('2d');
+    x.fillStyle=t.bg;x.fillRect(0,0,1170,2532);
+    // compass (lower half keeps the clock area free)
+    const cx=585,cy=1180,R=300,on=k=>(S.cells[k]||'').trim();
+    x.lineWidth=34;x.strokeStyle=on('b')?'#5E5CE6':t.sep;x.beginPath();x.arc(cx,cy,R,0,7);x.stroke();
+    x.fillStyle=t.card;x.beginPath();x.arc(cx,cy,R-30,0,7);x.fill();
+    x.strokeStyle=t.sep;x.lineWidth=4;x.beginPath();x.moveTo(cx,cy-200);x.lineTo(cx,cy+200);x.moveTo(cx-200,cy);x.lineTo(cx+200,cy);x.stroke();
+    const P={n:[0,-185],e:[185,0],s:[0,185],w:[-185,0]};x.textAlign='center';x.textBaseline='middle';
+    for(const k of ['n','e','s','w']){const d=DIRS[k];x.fillStyle=on(k)?d.fill:t.sep;x.beginPath();x.arc(cx+P[k][0],cy+P[k][1],62,0,7);x.fill();x.fillStyle=on(k)?d.ink:t.mut;x.font=`900 46px ${FF}`;x.fillText(d.name,cx+P[k][0],cy+P[k][1]+2);}
+    x.fillStyle=on('c')?DIRS.c.fill:t.sep;x.beginPath();x.arc(cx,cy,78,0,7);x.fill();x.fillStyle=on('c')?'#1C1C1E':t.mut;x.font=`900 42px ${FF}`;x.fillText('중심',cx,cy+2);
+    x.textBaseline='alphabetic';x.fillStyle=t.mut;x.font=`700 40px ${FF}`;x.fillText((S.nick?S.nick+'의 ':'나의 ')+'믿음 나침반',cx,800);
+    // lines
+    x.textAlign='left';let y=1590;
+    for(const k of ['c','n','e','s','w','b']){const d=DIRS[k];x.fillStyle=d.fill;rr(x,150,y-44,150,60,30);x.fill();x.fillStyle=d.ink;x.font=`700 30px ${FF}`;x.textAlign='center';x.fillText(d.name,225,y-4);x.textAlign='left';
+      x.fillStyle=cellText(k)?t.fg:t.mut;x.font=`500 38px ${FF}`;wrapText(x,cellText(k)||'—',330,y,690,46,1);y+=100;}
+    x.textAlign='center';x.fillStyle=t.mut;x.font=`500 34px ${FF}`;x.fillText('주의 말씀은 내 발에 등이요 내 길에 빛이니이다',cx,2280);x.font=`700 30px ${FF}`;x.fillText('시편 119:105',cx,2330);
+    showImage($('#outw'),c,'나의 믿음 나침반 배경화면');};
+}
+
+/* 기록 옮기기 */
+function viewBackup(){
+  let code='';try{code=btoa(unescape(encodeURIComponent(JSON.stringify(S))))}catch(e){}
+  app.innerHTML=`${topbar('','기록 옮기기')}<h1>기록 옮기기</h1>
+  <div class="card"><p>기록은 이 휴대폰의 이 브라우저에만 저장돼요. 휴대폰을 바꾸거나 다른 앱으로 QR을 열었다면, 아래 코드를 복사해 새 화면에 붙여 넣으세요.</p>
+   <label for="bk-out">나의 기록 코드</label><textarea id="bk-out" readonly style="font-size:12px;min-height:90px">${esc(code)}</textarea>
+   <div class="btns"><button class="btn" id="bk-copy">코드 복사</button><span class="small muted" id="bk-cmsg" style="align-self:center"></span></div></div>
+  <div class="card"><label for="bk-in">다른 기기의 코드 붙여 넣기</label><textarea id="bk-in" style="font-size:12px;min-height:90px"></textarea>
+   <div class="btns"><button class="btn ghost" id="bk-load">불러오기</button><span class="small" id="bk-lmsg" style="align-self:center"></span></div>
+   <p class="note">불러오면 지금 이 화면의 기록이 코드의 기록으로 바뀌어요.</p></div>`;
+  $('#bk-copy').onclick=async()=>{const t=$('#bk-out');try{await navigator.clipboard.writeText(t.value);$('#bk-cmsg').textContent='복사했어요';}catch(e){t.select();$('#bk-cmsg').textContent='코드가 선택됐어요. 직접 복사해 주세요';}};
+  $('#bk-load').onclick=()=>{const m=$('#bk-lmsg');try{const o=JSON.parse(decodeURIComponent(escape(atob($('#bk-in').value.trim()))));if(!o||typeof o!=='object'||!('cells' in o))throw 0;
+    S=Object.assign({nick:'',cells:{},missions:{},pre:null,post:null,profile:{},quiz:{},decide:{},screen:{},cheer:{},pledge:{},wall:{theme:'night'}},o);save();m.style.color='var(--ok)';m.textContent='불러왔어요';}
+    catch(e){m.style.color='var(--bad)';m.textContent='코드를 읽을 수 없어요. 전체를 빠짐없이 붙여 넣었는지 확인해 주세요.';}};
+}
+
+/* ---------- router ---------- */
+function render(){
+  const h=(location.hash||'').replace('#','');
+  if(L(h))viewLesson(L(h));else if(h==='intro')viewIntro();else if(h==='card')viewCard();else if(h==='backup')viewBackup();else viewHome();
+  window.scrollTo(0,0);
+}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(!g)return;const to=g.dataset.go;
+  if(('#'+to)===location.hash||(!to&&!location.hash))render();else location.hash=to;});
+window.addEventListener('hashchange',render);
+render();
+})();
+</script>
+
+</body></html>
